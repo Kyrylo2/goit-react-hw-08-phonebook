@@ -13,9 +13,7 @@ const getFilteredContacts = (contacts, filterValue) =>
   contacts.filter(el => el.name.toLowerCase().includes(filterValue));
 
 const Contacts = React.memo(() => {
-  console.log(useGetContactsQuery());
   const { data: contacts = [], error, isLoading } = useGetContactsQuery();
-  console.log(contacts, isLoading, error);
 
   const filterValue = useSelector(state => state.filter);
 
@@ -23,8 +21,6 @@ const Contacts = React.memo(() => {
     () => getFilteredContacts(contacts, filterValue),
     [contacts, filterValue]
   );
-
-  console.log(contactsArr);
 
   return (
     <div>

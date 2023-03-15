@@ -4,8 +4,8 @@ import Layout from 'components/Layout';
 
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { refreshUser } from 'redux/auth/auth-operations';
-import PrivateRoute from './PrivateRouts';
-import PublicRoute from './PublicRouts';
+import PrivateRoute from './PrivateRoutes';
+import PublicRoute from './PublicRoutes';
 
 import { useDispatch } from 'react-redux';
 
