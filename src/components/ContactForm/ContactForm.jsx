@@ -1,20 +1,16 @@
 import { useState } from 'react';
-// import { nanoid } from 'nanoid';
 
 import { FormControl } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { useDispatch } from 'react-redux';
-// import { addContact } from 'redux/operations';
+
 import { useAddContactMutation } from 'redux/contactsApi';
 
 export default function ContactsForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
-  const [addContact, { isLoading }] = useAddContactMutation();
-
-  const dispatch = useDispatch();
+  const [addContact] = useAddContactMutation();
 
   const handleStateChange = e => {
     const { name, value } = e.target;

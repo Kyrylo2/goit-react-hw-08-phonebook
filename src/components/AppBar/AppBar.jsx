@@ -1,8 +1,8 @@
 import { Header } from './AppBar.styled';
 
-import { Outlet } from 'react-router-dom';
-import { Suspense } from 'react';
-import Spinner from 'components/Spinner/Spinner';
+// import { Outlet } from 'react-router-dom';
+// import { Suspense } from 'react';
+// import Spinner from 'components/Spinner/Spinner';
 import { useAuth } from 'hooks/useAuth';
 import { UserMenu } from 'components/UserMenu/UserMenu';
 import { AuthNav } from 'components/AuthNav/AuthNav';
