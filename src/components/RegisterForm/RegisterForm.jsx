@@ -1,9 +1,9 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { register } from 'redux/auth/auth-operations';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { register } from 'redux/auth/auth-operations';
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -11,77 +11,104 @@ import TextField from '@mui/material/TextField';
 export const RegisterForm = () => {
   const dispatch = useDispatch();
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    if (
-      !form.elements.name.value ||
-      !form.elements.email.value ||
-      !form.elements.password.value
-    ) {
-      toast.error('Fill in all fields', {
-        position: 'top-center',
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'colored',
-      });
-      return;
-    }
+  const initialValues = {
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  };
 
-    dispatch(
-      register({
-        name: form.elements.name.value,
-        email: form.elements.email.value,
-        password: form.elements.password.value,
-      })
-    );
-    form.reset();
+  const validationSchema = Yup.object({
+    name: Yup.string().required('Required'),
+    email: Yup.string().email('Invalid email address').required('Required'),
+    password: Yup.string()
+      .required('Required')
+      .min(8, 'Password must be at least 8 characters'),
+    confirmPassword: Yup.string()
+      .required('Required')
+      .oneOf([Yup.ref('password'), null], 'Passwords must match'),
+  });
+
+  const handleSubmit = (values, { resetForm }) => {
+    dispatch(register(values));
+    resetForm();
   };
 
   return (
-    <Box
-      component="form"
-      sx={{
-        '& > :not(style)': { m: 1, width: '25ch' },
-      }}
-      noValidate
-      autoComplete="off"
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
-      <Stack spacing={2}>
-        <TextField
-          id="outlined-basic"
-          name="name"
-          type="text"
-          label="Username"
-          variant="outlined"
-        />
-        <TextField
-          type="email"
-          name="email"
-          id="filled-basic"
-          label="Email"
-          variant="outlined"
-        />
-        <TextField
-          type="password"
-          name="password"
-          id="standard-basic"
-          label="Password"
-          variant="outlined"
-        />
-        <Button
-          type="submit"
-          variant="contained"
-          sx={{ height: 55, width: '200' }}
-        >
-          Register
-        </Button>
-      </Stack>
-    </Box>
+      {({ touched, errors }) => (
+        <Form>
+          <Stack
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            spacing={3}
+          >
+            <Box sx={{ width: '100%' }}>
+              <Field
+                as={TextField}
+                name="name"
+                label="Username"
+                variant="outlined"
+                error={touched.name && Boolean(errors.name)}
+                helperText={touched.name && errors.name}
+                sx={{ width: '100%' }}
+              />
+            </Box>
+            <Box sx={{ width: '100%' }}>
+              <Field
+                as={TextField}
+                name="email"
+                label="Email"
+                variant="outlined"
+                error={touched.email && Boolean(errors.email)}
+                helperText={touched.email && errors.email}
+                sx={{ width: '100%' }}
+              />
+            </Box>
+            <Box sx={{ width: '100%' }}>
+              <Field
+                as={TextField}
+                name="password"
+                label="Password"
+                variant="outlined"
+                type="password"
+                error={touched.password && Boolean(errors.password)}
+                helperText={touched.password && errors.password}
+                sx={{ width: '100%' }}
+              />
+            </Box>
+            <Box sx={{ width: '100%' }}>
+              <Field
+                as={TextField}
+                name="confirmPassword"
+                label="Confirm Password"
+                variant="outlined"
+                type="password"
+                error={
+                  touched.confirmPassword && Boolean(errors.confirmPassword)
+                }
+                helperText={touched.confirmPassword && errors.confirmPassword}
+                sx={{ width: '100%' }}
+              />
+            </Box>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{ height: 55, width: '200' }}
+            >
+              Register
+            </Button>
+          </Stack>
+        </Form>
+      )}
+    </Formik>
   );
 };

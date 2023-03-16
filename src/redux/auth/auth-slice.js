@@ -8,6 +8,7 @@ const initialState = {
   token: null,
   isLoggedIn: false,
   isRefreshing: false,
+  isInitialized: false, // add a new flag to track initialization status
 };
 
 const authSlice = createSlice({
@@ -34,7 +35,12 @@ const authSlice = createSlice({
         state.token = null;
         state.isLoggedIn = false;
       })
-      .addCase(refreshUser.pending, state => {
+      .addCase(refreshUser.pending, (state, action) => {
+        // check if the user has already been initialized
+        if (!state.isInitialized) {
+          state.isInitialized = true;
+          return state;
+        }
         state.isRefreshing = true;
       })
       .addCase(refreshUser.fulfilled, (state, action) => {
@@ -42,7 +48,7 @@ const authSlice = createSlice({
         state.isLoggedIn = true;
         state.isRefreshing = false;
       })
-      .addCase(refreshUser.rejected, state => {
+      .addCase(refreshUser.rejected, (state, action) => {
         state.isRefreshing = false;
       });
   },
