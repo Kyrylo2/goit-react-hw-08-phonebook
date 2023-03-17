@@ -14,16 +14,7 @@ export default function LoginForm() {
     e.preventDefault();
     const form = e.currentTarget;
     if (!form.elements.email.value || !form.elements.password.value) {
-      toast.error('Fill in all fields', {
-        position: 'top-center',
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'colored',
-      });
+      toast.error('Fill in all fields');
       return;
     }
 
